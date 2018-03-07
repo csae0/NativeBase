@@ -203,7 +203,7 @@ class Item extends Component {
             inputProps.onFocus && inputProps.onFocus();
           }}
           onBlur={() => {
-            inputProps.value
+            inputProps.value || this.props.placeholder
               ? this.setState({
                   isFocused: true
                 })
