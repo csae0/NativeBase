@@ -162,7 +162,7 @@ _this3.setState({isFocused:true});
 inputProps.onFocus&&inputProps.onFocus();
 },
 onBlur:function onBlur(){
-inputProps.value?
+inputProps.value||_this3.props.placeholder?
 _this3.setState({
 isFocused:true}):
 
