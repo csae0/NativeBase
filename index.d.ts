@@ -126,7 +126,7 @@ declare module "native-base" {
 		/**
          * see Widget Subtitle/index.js
          */
-		interface SubTitle {
+		interface Subtitle {
 			style?: ReactNative.ViewStyle | Array<ReactNative.ViewStyle>;
 		}
 		/**
@@ -261,6 +261,7 @@ declare module "native-base" {
 				disableLeftSwipe?:boolean;
 				disableRightSwipe?:boolean;
 				rightOpenValue?:number;
+				leftOpenValue?: number;
 				renderRightHiddenRow?:(
 					rowData: any,
 					sectionID: string | number,
@@ -293,6 +294,7 @@ declare module "native-base" {
 			iconLeft?: boolean;
 			icon?: boolean;
 			avatar?: boolean;
+			thumbnail?: boolean;
 			button?: boolean;
 			/**
              * Helps to organize and group the list items.
@@ -326,6 +328,7 @@ declare module "native-base" {
 			footer?: boolean;
 			cardBody?: boolean;
 			button?: boolean;
+			bordered?: boolean;
 		}
 		/**
          * Override React ListViewProperties
@@ -477,6 +480,7 @@ declare module "native-base" {
 			dataArray?: Array<any>;
 			style?: ReactNative.ViewStyle | Array<ReactNative.ViewStyle>;
 			ref?: React.Ref<ReactNative.ViewProperties | ReactListViewProperties>;
+			transparent?: boolean;
 		}
 		/**
          * react-native-easy-grid
@@ -556,6 +560,7 @@ declare module "native-base" {
          */
 		interface Icon {
 			name: string;
+			type?: "Ionicons" | "Entypo" | "FontAwesome" | "Foundation" | "MaterialIcons" | "MaterialCommunityIcons" | "Octicons" | "Zocial" | "SimpleLineIcons";
 			// TODO position attribute of ReactNative.FlexStyle hasn't another position values without "absolute" and "relative"
 			style?: any;
 			onPress?: (e?: any) => any;
@@ -584,6 +589,8 @@ declare module "native-base" {
              * By default thumbnail is circle in shape.
              */
 			square?: boolean;
+			small?: boolean;
+			large?: boolean;
 		}
 		/**
          * see Widget Spinner.js
@@ -823,7 +830,7 @@ declare module "native-base" {
      */
 	export class Title extends React.Component<NativeBase.Title, any> {}
 
-	export class SubTitle extends React.Component<NativeBase.SubTitle, any> {}
+	export class Subtitle extends React.Component<NativeBase.Subtitle, any> {}
 
 	/**
      * NativeBase.Button
@@ -1019,7 +1026,7 @@ declare module "native-base" {
 	export class ActionSheet {
 		static show: (
 			configuration: {
-				options: string[];
+				options: string[] | Array<{text: string, icon?: string, iconColor?: string}>;
 				cancelButtonIndex?: number;
 				destructiveButtonIndex?: number;
 				title?: string;
