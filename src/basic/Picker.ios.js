@@ -1,14 +1,13 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import createReactClass from "create-react-class";
-import { Picker, Modal, View, ViewPropTypes, FlatList } from "react-native";
+import { Picker, Modal, View, ViewPropTypes, FlatList, Dimensions } from "react-native";
 import _ from "lodash";
 import { Text } from "./Text";
 import { List } from "./List";
 import { IconNB as Icon } from "./IconNB";
 import { Radio } from "./Radio";
 import { Container } from "./Container";
-import { Content } from "./Content";
 import { ListItem } from "./ListItem";
 import { Button } from "./Button";
 import { Header } from "./Header";
@@ -17,9 +16,9 @@ import { Left } from "./Left";
 import { Right } from "./Right";
 import { Body } from "./Body";
 import { connectStyle } from "native-base-shoutem-theme";
-import computeProps from "../Utils/computeProps";
+import computeProps from "../utils/computeProps";
 
-import mapPropsToStyleNames from "../Utils/mapPropsToStyleNames";
+import mapPropsToStyleNames from "../utils/mapPropsToStyleNames";
 
 class PickerNB extends Component {
   constructor(props) {
@@ -27,7 +26,7 @@ class PickerNB extends Component {
     this.state = {
       modalVisible: false,
       currentLabel: this.getLabel(props),
-      dataSource: props.children
+      dataSource: this.getChildren(props.children)
     };
   }
 
@@ -35,7 +34,7 @@ class PickerNB extends Component {
     const currentLabel = this.state.currentLabel;
     const nextLabel = this.getLabel(nextProps);
     const currentDS = this.state.dataSource;
-    const nextDS = nextProps.children;
+    const nextDS = this.getChildren(nextProps.children);
 
     if (currentLabel !== nextLabel) {
       this.setState({
@@ -71,8 +70,9 @@ class PickerNB extends Component {
   }
 
   getLabel(props) {
+    let children = this.getChildren(props.children);
     const item = _.find(
-      props.children,
+      children,
       child => child.props.value === props.selectedValue
     );
     return _.get(item, "props.label");
@@ -85,18 +85,29 @@ class PickerNB extends Component {
     );
   }
 
+  getChildren(children) {
+    if (children && !Array.isArray(children)) {
+      return [].concat(children);
+    }
+    children = [].concat.apply([], children)
+    return children;
+  }
+
   renderIcon() {
     return React.cloneElement(this.props.iosIcon, {
-      style: {
-        fontSize: 22,
-        lineHeight: 26,
-        color: this.props.placeholderIconColor
-      }
+      style: [
+        {
+          fontSize: 22,
+          lineHeight: 26
+        },
+        { ...this.props.iosIcon.props.style }
+      ]
     });
   }
 
   renderButton() {
     const onPress = () => {
+      if (this.props.enabled !== undefined && !this.props.enabled) return;
       this._setModalVisible(true);
     };
     const text = this.state.currentLabel
@@ -119,13 +130,15 @@ class PickerNB extends Component {
         onPress={onPress}
       >
         {this.state.currentLabel ? (
-          <Text style={this.props.textStyle} note={this.props.note}>
+          <Text style={[this.props.textStyle, { width: Dimensions.get("window").width - 50 }]} note={this.props.note} numberOfLines={1} ellipsizeMode="tail">
             {this.state.currentLabel}
           </Text>
         ) : (
             <Text
-              style={[this.props.textStyle, this.props.placeholderStyle]}
+              style={[this.props.textStyle, this.props.placeholderStyle, { width: Dimensions.get("window").width - 50 }]}
               note={this.props.note === false ? false : true}
+              numberOfLines={1}
+              ellipsizeMode="tail"
             >
               {this.props.placeholder}
             </Text>
@@ -147,6 +160,7 @@ class PickerNB extends Component {
                 shadowColor: null,
                 shadowRadius: null,
                 shadowOpacity: null,
+                marginLeft: 3,
                 ...this.props.headerBackButtonStyle
               }}
               transparent
@@ -174,7 +188,8 @@ class PickerNB extends Component {
       <View ref={c => (this._root = c)}>
         {this.renderButton()}
         <Modal
-          supportedOrientations={this.props.supportedOrientations || null}
+          // supportedOrientations={this.props.supportedOrientations || null}
+          supportedOrientations={['portrait', 'landscape']}
           animationType="slide"
           transparent={false}
           visible={this.state.modalVisible}
@@ -182,13 +197,13 @@ class PickerNB extends Component {
             this._setModalVisible(false);
           }}
         >
-          <Container>
+          <Container style={this.props.modalStyle}>
             {this.renderHeader()}
-            <Content>
-              <FlatList
-                data={this.state.dataSource}
-                keyExtractor={(item, index) => index}
-                renderItem={({ item }) => <ListItem
+            <FlatList
+              data={this.state.dataSource}
+              keyExtractor={(item, index) => String(index)}
+              renderItem={({ item }) => (
+                <ListItem
                   selected={item.props.value === this.props.selectedValue}
                   button
                   style={this.props.itemStyle}
@@ -198,9 +213,11 @@ class PickerNB extends Component {
                     this.setState({ current: item.props.label });
                   }}
                 >
-                  <Text style={this.props.itemTextStyle}>
-                    {item.props.label}
-                  </Text>
+                  <Left>
+                    <Text style={this.props.itemTextStyle}>
+                      {item.props.label}
+                    </Text>
+                  </Left>
                   <Right>
                     {item.props.value === this.props.selectedValue ? (
                       <Radio selected />
@@ -208,9 +225,9 @@ class PickerNB extends Component {
                         <Radio selected={false} />
                       )}
                   </Right>
-                </ListItem>}
-              />
-            </Content>
+                </ListItem>
+              )}
+            />
           </Container>
         </Modal>
       </View>
@@ -220,7 +237,7 @@ class PickerNB extends Component {
 
 PickerNB.Item = createReactClass({
   render() {
-    return <Picker.Item {...this.props() } />;
+    return <Picker.Item {...this.props()} />;
   }
 });
 

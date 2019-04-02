@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import computeProps from "../Utils/computeProps";
+import computeProps from "../utils/computeProps";
 // import Button from './../Button';
 import {
   Platform,
@@ -8,14 +8,15 @@ import {
   Dimensions,
   TouchableOpacity,
   TouchableNativeFeedback,
-  View
+  View,
+  StyleSheet
 } from "react-native";
 import { Icon } from "./Icon";
 import { IconNB } from "./IconNB";
 import { Button } from "./Button";
 import variables from "./../theme/variables/platform";
 import _ from "lodash";
-import mapPropsToStyleNames from "../Utils/mapPropsToStyleNames";
+import mapPropsToStyleNames from "../utils/mapPropsToStyleNames";
 import { connectStyle } from "native-base-shoutem-theme";
 
 const { height, width } = Dimensions.get("window");
@@ -24,7 +25,11 @@ const AnimatedFab = Animated.createAnimatedComponent(Button);
 
 class Fab extends Component {
   props: Animated.props & {
-    position: ?string
+    pos?: string;
+    top?: number;
+    left?: number;
+    right?: number;
+    bottom?: number;
   };
 
   state: {
@@ -42,9 +47,7 @@ class Fab extends Component {
     };
   }
 
-  fabTopValue(
-    pos
-  ): ?{ top: ?number, bottom: ?number, left: ?number, right: ?number } {
+  fabTopValue(pos) {
     if (pos === "topLeft") {
       return {
         top: 20,
@@ -154,7 +157,9 @@ class Fab extends Component {
         width: 56,
         height: this.containerHeight,
         flexDirection: this.props.direction
-          ? this.props.direction == "left || right" ? "row" : "column"
+          ? this.props.direction === "left" || this.props.direction === "right"
+            ? "row"
+            : "column"
           : "column",
         alignItems: "center"
       },
@@ -211,7 +216,7 @@ class Fab extends Component {
           : i * 50 + 50
     };
 
-    return _.merge(this.getInitialStyle().buttonStyle, child.props.style, type);
+    return _.merge(this.getInitialStyle().buttonStyle, StyleSheet.flatten(child.props.style), type);
   }
   prepareButtonProps(child) {
     var inp = _.clone(child.props);
@@ -421,25 +426,26 @@ class Fab extends Component {
       <Animated.View style={this.getContainerStyle()}>
         {this.renderButtons()}
         {Platform.OS === "ios" ||
-        variables.androidRipple === false ||
-        Platform["Version"] <= 21 ? (
-          <TouchableOpacity
-            onPress={() => this.fabOnPress()}
-            {...this.prepareFabProps()}
-            activeOpacity={1}
-          >
-            {this.renderFab()}
-          </TouchableOpacity>
-        ) : (
-          <TouchableNativeFeedback
-            onPress={() => this.fabOnPress()}
-            {...this.prepareFabProps()}
-          >
-            <View style={[this.getInitialStyle().fab, this.props.style]}>
+          variables.androidRipple === false ||
+          Platform["Version"] <= 21 ? (
+            <TouchableOpacity
+              onPress={() => this.fabOnPress()}
+              {...this.prepareFabProps()}
+              activeOpacity={1}
+            >
               {this.renderFab()}
-            </View>
-          </TouchableNativeFeedback>
-        )}
+            </TouchableOpacity>
+          ) : (
+            <TouchableNativeFeedback
+              onPress={() => this.fabOnPress()}
+              background={TouchableNativeFeedback.Ripple(variables.androidRippleColor, false)}
+              {...this.prepareFabProps()}
+            >
+              <View style={[this.getInitialStyle().fab, this.props.style]}>
+                {this.renderFab()}
+              </View>
+            </TouchableNativeFeedback>
+          )}
       </Animated.View>
     );
   }
