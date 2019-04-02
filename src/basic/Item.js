@@ -22,7 +22,7 @@ class Item extends Component {
   }
   componentDidMount() {
     if (this.props.floatingLabel) {
-      if (this.inputProps && this.inputProps.value || this.props.placeholder) {
+      if ((this.inputProps && this.inputProps.value) || this.props.placeholder) {
         this.setState({ isFocused: true });
         this.floatUp(-16);
       }
@@ -41,7 +41,7 @@ class Item extends Component {
       }
     });
     if (this.props.floatingLabel) {
-      if (this.inputProps && this.inputProps.value || this.props.placeholder) {
+      if ((this.inputProps && this.inputProps.value) || this.props.placeholder) {
         this.setState({ isFocused: true });
         this.floatUp(-16);
       }
@@ -89,7 +89,7 @@ class Item extends Component {
           })
         );
         this.floatUp(-16);
-      } else {
+      } else if (!this.props.placeholder) {
         newLabel.push(label);
         this.floatBack();
       }
@@ -162,7 +162,7 @@ class Item extends Component {
             inputProps.onFocus && inputProps.onFocus();
           }}
           onBlur={() => {
-            inputProps.value
+            inputProps.value || this.props.placeholder
               ? this.setState({
                   isFocused: true
                 })
@@ -203,7 +203,7 @@ class Item extends Component {
             inputProps.onFocus && inputProps.onFocus();
           }}
           onBlur={() => {
-            inputProps.value
+            inputProps.value || this.props.placeholder
               ? this.setState({
                   isFocused: true
                 })

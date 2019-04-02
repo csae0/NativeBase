@@ -22,7 +22,7 @@ opacAnim:new _reactNative.Animated.Value(1)};return _this;
 }_createClass(Item,[{key:"componentDidMount",value:function componentDidMount()
 {
 if(this.props.floatingLabel){
-if(this.inputProps&&this.inputProps.value){
+if(this.inputProps&&this.inputProps.value||this.props.placeholder){
 this.setState({isFocused:true});
 this.floatUp(-16);
 }
@@ -41,7 +41,7 @@ return item;
 }
 });
 if(this.props.floatingLabel){
-if(this.inputProps&&this.inputProps.value){
+if(this.inputProps&&this.inputProps.value||this.props.placeholder){
 this.setState({isFocused:true});
 this.floatUp(-16);
 }
@@ -89,7 +89,7 @@ labelProps.style)})));
 
 
 this.floatUp(-16);
-}else{
+}else if(!this.props.placeholder){
 newLabel.push(label);
 this.floatBack();
 }
@@ -162,7 +162,7 @@ _this3.setState({isFocused:true});
 inputProps.onFocus&&inputProps.onFocus();
 },
 onBlur:function onBlur(){
-inputProps.value?
+inputProps.value||_this3.props.placeholder?
 _this3.setState({
 isFocused:true}):
 
@@ -203,7 +203,7 @@ _this3.setState({isFocused:true});
 inputProps.onFocus&&inputProps.onFocus();
 },
 onBlur:function onBlur(){
-inputProps.value?
+inputProps.value||_this3.props.placeholder?
 _this3.setState({
 isFocused:true}):
 
