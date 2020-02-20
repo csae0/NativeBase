@@ -9,7 +9,7 @@ import {
   View,
   StyleSheet
 } from 'react-native';
-import { isArray, remove } from 'lodash';
+import { remove } from 'lodash';
 import { connectStyle } from 'native-base-shoutem-theme';
 
 import variables from '../theme/variables/platform';
@@ -34,8 +34,8 @@ class Item extends Component {
   componentDidMount() {
     if (this.props.floatingLabel) {
       if (this.inputProps && this.inputProps.value || this.props.placeholder) {
-          this.setState({ isFocused: true });
-          this.floatUp(-16);
+        this.setState({ isFocused: true });
+        this.floatUp(-16);
       }
       if (this.inputProps && this.inputProps.getRef)
         this.inputProps.getRef(this._inputRef);
@@ -110,7 +110,6 @@ class Item extends Component {
         this.setState({ isFocused: true });
         this.floatUp(-16);
       } else if (!this.props.placeholder) {
-        newLabel.push(label);
         this.floatBack();
       }
       if (this.inputProps && this.inputProps.getRef)
