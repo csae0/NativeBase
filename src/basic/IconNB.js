@@ -25,7 +25,7 @@ const Icomoon = createIconSetFromIcoMoon(icoMoonConfig);
 
 class IconNB extends React.PureComponent {
   static contextTypes = {
-    theme: PropTypes.object,
+    theme: PropTypes.object
   };
 
   constructor(props) {
@@ -38,10 +38,6 @@ class IconNB extends React.PureComponent {
     if (nextProps.type && this.props.type !== nextProps.type) {
       this.setIcon(nextProps.type);
     }
-  }
-
-  setRoot(c){
-    this._root = c;
   }
 
   setIcon(iconType) {
@@ -101,6 +97,10 @@ class IconNB extends React.PureComponent {
     }
   }
 
+  setRoot(c) {
+    this._root = c;
+  }
+
   render() {
     return <this.Icon ref={this.setRoot} {...this.props} />;
   }
@@ -122,8 +122,8 @@ IconNB.propTypes = {
     'MaterialIcons',
     'Octicons',
     'SimpleLineIcons',
-    'Zocial',
-  ]),
+    'Zocial'
+  ])
 };
 
 const StyledIconNB = connectStyle(
