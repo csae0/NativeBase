@@ -217,7 +217,7 @@ class Item extends Component {
               ref={c => (this._inputRef = c)}
               key="l2"
               {...inputProps}
-              placeholder={getPlacholderValue(inputProps)}
+              placeholder={Item.getPlacholderValue(inputProps)}
               onFocus={() => {
                 this.setState({ isFocused: true });
                 if (inputProps.onFocus) {
@@ -296,7 +296,7 @@ class Item extends Component {
               ref={c => (this._inputRef = c)}
               key="l2"
               {...inputProps}
-              placeholder={getPlacholderValue(inputProps)}
+              placeholder={Item.getPlacholderValue(inputProps)}
               onFocus={() => {
                 this.setState({ isFocused: true });
                 inputProps.onFocus && inputProps.onFocus();
@@ -351,7 +351,7 @@ class Item extends Component {
           // value={this.state.text}
           key="l2"
           {...inputProps}
-          placeholder={getPlacholderValue(inputProps)}
+          placeholder={Item.getPlacholderValue(inputProps)}
           onFocus={() => {
             this.setState({ isFocused: true });
             inputProps.onFocus && inputProps.onFocus();
