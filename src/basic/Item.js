@@ -22,10 +22,6 @@ import { Icon } from './Icon';
 import { Thumbnail } from './Thumbnail';
 
 class Item extends Component {
-  static getPlacholderValue(inputProps) {
-    return (inputProps && inputProps.placeholder) || '';
-  }
-
   constructor(props) {
     super(props);
     this.state = {
@@ -217,7 +213,7 @@ class Item extends Component {
               ref={c => (this._inputRef = c)}
               key="l2"
               {...inputProps}
-              placeholder={Item.getPlacholderValue(inputProps)}
+              placeholder={(inputProps && inputProps.placeholder) || undefined}
               onFocus={() => {
                 this.setState({ isFocused: true });
                 if (inputProps.onFocus) {
@@ -296,7 +292,7 @@ class Item extends Component {
               ref={c => (this._inputRef = c)}
               key="l2"
               {...inputProps}
-              placeholder={Item.getPlacholderValue(inputProps)}
+              placeholder={(inputProps && inputProps.placeholder) || undefined}
               onFocus={() => {
                 this.setState({ isFocused: true });
                 inputProps.onFocus && inputProps.onFocus();
@@ -351,7 +347,7 @@ class Item extends Component {
           // value={this.state.text}
           key="l2"
           {...inputProps}
-          placeholder={Item.getPlacholderValue(inputProps)}
+          placeholder={(inputProps && inputProps.placeholder) || undefined}
           onFocus={() => {
             this.setState({ isFocused: true });
             inputProps.onFocus && inputProps.onFocus();
